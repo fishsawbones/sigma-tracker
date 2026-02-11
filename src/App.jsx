@@ -79,6 +79,40 @@ function computeStatsRolling(returns, windowSize) {
   return { mean, std, data };
 }
 
+// Annualized realized volatility across multiple lookback windows
+// Uses daily returns from raw price data (always daily, regardless of chart timeframe)
+function computeVolatility(prices) {
+  if (!prices || prices.length < 2) return [];
+
+  // Compute daily log returns
+  const dailyReturns = [];
+  for (let i = 1; i < prices.length; i++) {
+    if (prices[i].close > 0 && prices[i - 1].close > 0) {
+      dailyReturns.push(Math.log(prices[i].close / prices[i - 1].close));
+    }
+  }
+
+  const windows = [
+    { label: "20d", days: 20, desc: "~1 month" },
+    { label: "60d", days: 60, desc: "~1 quarter" },
+    { label: "120d", days: 120, desc: "~6 months" },
+    { label: "252d", days: 252, desc: "~1 year" },
+  ];
+
+  const ANNUALIZATION = Math.sqrt(252);
+
+  return windows.map((w) => {
+    const n = Math.min(w.days, dailyReturns.length);
+    if (n < 2) return { ...w, vol: null };
+    const slice = dailyReturns.slice(-n);
+    const mean = slice.reduce((a, b) => a + b, 0) / n;
+    const variance = slice.reduce((a, b) => a + (b - mean) ** 2, 0) / (n - 1);
+    const dailyStd = Math.sqrt(variance);
+    const annualizedVol = dailyStd * ANNUALIZATION * 100; // as percentage
+    return { ...w, vol: annualizedVol };
+  });
+}
+
 function formatDate(dateStr, period) {
   const d = new Date(dateStr + "T00:00:00");
   const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -184,6 +218,12 @@ export default function App() {
     if (!priceData?.prices) return [];
     return computeReturns(priceData.prices, period);
   }, [priceData, period]);
+
+  // Always compute daily returns for volatility (independent of chart timeframe)
+  const volatility = useMemo(() => {
+    if (!priceData?.prices) return [];
+    return computeVolatility(priceData.prices);
+  }, [priceData]);
 
   const { mean, std, data: allData } = useMemo(() => {
     if (sigmaMode === "rolling") return computeStatsRolling(returns, rollingWindow);
@@ -313,6 +353,71 @@ export default function App() {
             </div>
           )}
         </div>
+
+        {/* Volatility Panel */}
+        {priceData && !loading && volatility.length > 0 && (
+          <div style={{
+            display: "flex", gap: 0, marginBottom: 16, background: "#0b0b14",
+            border: "1px solid #151522", borderRadius: 8, overflow: "hidden",
+          }}>
+            <div style={{
+              padding: "10px 16px", display: "flex", alignItems: "center",
+              borderRight: "1px solid #151522", minWidth: 140,
+            }}>
+              <div>
+                <div style={{ fontSize: 9, letterSpacing: 2, color: "#555", textTransform: "uppercase" }}>
+                  Annualized Vol
+                </div>
+                <div style={{ fontSize: 10, color: "#444", marginTop: 2 }}>
+                  σ(daily) × √252
+                </div>
+              </div>
+            </div>
+            {volatility.map((v) => {
+              if (v.vol == null) return null;
+              const volColor = v.vol > 40 ? "#ff1744" : v.vol > 25 ? "#ff9100" : v.vol > 15 ? "#ffd600" : "#00c853";
+              return (
+                <div key={v.label} style={{
+                  flex: 1, padding: "10px 16px", borderRight: "1px solid #151522",
+                  textAlign: "center",
+                }}>
+                  <div style={{ fontSize: 9, letterSpacing: 2, color: "#555", textTransform: "uppercase" }}>
+                    {v.label} <span style={{ color: "#333", letterSpacing: 0 }}>({v.desc})</span>
+                  </div>
+                  <div style={{ fontSize: 20, fontWeight: 700, color: volColor, marginTop: 2 }}>
+                    {v.vol.toFixed(1)}%
+                  </div>
+                </div>
+              );
+            })}
+            <div style={{
+              padding: "10px 16px", display: "flex", alignItems: "center",
+              minWidth: 100, justifyContent: "center",
+            }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 9, letterSpacing: 2, color: "#555", textTransform: "uppercase" }}>
+                  Regime
+                </div>
+                {(() => {
+                  const v20 = volatility.find(v => v.label === "20d")?.vol;
+                  const v252 = volatility.find(v => v.label === "252d")?.vol;
+                  if (v20 == null || v252 == null) return null;
+                  const ratio = v20 / v252;
+                  const expanding = ratio > 1.15;
+                  const contracting = ratio < 0.85;
+                  return (
+                    <div style={{
+                      fontSize: 12, fontWeight: 700, marginTop: 2,
+                      color: expanding ? "#ff5252" : contracting ? "#00c853" : "#888",
+                    }}>
+                      {expanding ? "▲ Expanding" : contracting ? "▼ Contracting" : "● Stable"}
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Controls Row 1 */}
         <div style={{ display: "flex", gap: 16, marginBottom: 12, flexWrap: "wrap", alignItems: "flex-end" }}>
