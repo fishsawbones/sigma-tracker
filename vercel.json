@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/history/:ticker", "destination": "/api/history/:ticker" },
+    { "source": "/api/search/:query", "destination": "/api/search/:query" }
+  ]
+}
