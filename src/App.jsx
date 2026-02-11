@@ -285,21 +285,21 @@ export default function App() {
   };
 
   const s = {
-    label: { fontSize: 9, letterSpacing: 2, color: "#555", textTransform: "uppercase", marginBottom: 4 },
+    label: { fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase", marginBottom: 4 },
     input: {
       background: "#0f0f18", border: "1px solid #1e1e2a", borderRadius: 5,
-      color: "#d4d0c8", padding: "6px 10px", fontSize: 13, fontFamily: "inherit", outline: "none",
+      color: "#e0ddd5", padding: "6px 10px", fontSize: 14, fontFamily: "inherit", outline: "none",
     },
     btn: (active) => ({
       background: active ? "#1a1a2e" : "transparent",
-      border: active ? "1px solid #444" : "1px solid #1a1a24",
-      borderRadius: 4, color: active ? "#d4d0c8" : "#555",
-      padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: "inherit",
+      border: active ? "1px solid #555" : "1px solid #2a2a34",
+      borderRadius: 4, color: active ? "#e0ddd5" : "#777",
+      padding: "6px 12px", fontSize: 13, cursor: "pointer", fontFamily: "inherit",
       fontWeight: active ? 700 : 400, transition: "all 0.15s",
     }),
     presetBtn: {
-      background: "transparent", border: "1px solid #1a1a24", borderRadius: 4,
-      color: "#666", padding: "6px 8px", fontSize: 10, cursor: "pointer", fontFamily: "inherit",
+      background: "transparent", border: "1px solid #2a2a34", borderRadius: 4,
+      color: "#999", padding: "6px 8px", fontSize: 11, cursor: "pointer", fontFamily: "inherit",
     },
   };
 
@@ -315,7 +315,7 @@ export default function App() {
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 16 }}>
           <div>
-            <div style={{ fontSize: 10, letterSpacing: 5, color: "#444", textTransform: "uppercase", marginBottom: 4 }}>
+            <div style={{ fontSize: 11, letterSpacing: 5, color: "#666", textTransform: "uppercase", marginBottom: 4 }}>
               Statistical Deviation Monitor
             </div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
@@ -325,7 +325,7 @@ export default function App() {
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
               }}>σ Tracker</h1>
               {priceData && (
-                <span style={{ fontSize: 13, color: "#666" }}>
+                <span style={{ fontSize: 14, color: "#999" }}>
                   {priceData.name || priceData.ticker} · {priceData.exchange}
                 </span>
               )}
@@ -365,10 +365,10 @@ export default function App() {
               borderRight: "1px solid #151522", minWidth: 140,
             }}>
               <div>
-                <div style={{ fontSize: 9, letterSpacing: 2, color: "#555", textTransform: "uppercase" }}>
+                <div style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase" }}>
                   Annualized Vol
                 </div>
-                <div style={{ fontSize: 10, color: "#444", marginTop: 2 }}>
+                <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
                   σ(daily) × √252
                 </div>
               </div>
@@ -381,8 +381,8 @@ export default function App() {
                   flex: 1, padding: "10px 16px", borderRight: "1px solid #151522",
                   textAlign: "center",
                 }}>
-                  <div style={{ fontSize: 9, letterSpacing: 2, color: "#555", textTransform: "uppercase" }}>
-                    {v.label} <span style={{ color: "#333", letterSpacing: 0 }}>({v.desc})</span>
+                  <div style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase" }}>
+                    {v.label} <span style={{ color: "#555", letterSpacing: 0 }}>({v.desc})</span>
                   </div>
                   <div style={{ fontSize: 20, fontWeight: 700, color: volColor, marginTop: 2 }}>
                     {v.vol.toFixed(1)}%
@@ -395,7 +395,7 @@ export default function App() {
               minWidth: 100, justifyContent: "center",
             }}>
               <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 9, letterSpacing: 2, color: "#555", textTransform: "uppercase" }}>
+                <div style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase" }}>
                   Regime
                 </div>
                 {(() => {
@@ -516,7 +516,7 @@ export default function App() {
               ))}
             </div>
           </div>
-          <div style={{ fontSize: 10, color: "#555", maxWidth: 340, lineHeight: 1.4, paddingBottom: 2 }}>
+          <div style={{ fontSize: 11, color: "#777", maxWidth: 340, lineHeight: 1.4, paddingBottom: 2 }}>
             {sigmaMode === "rolling"
               ? `Each bar measured against the prior ${rollingWindow} periods. Sudden moves after calm periods register as larger deviations.`
               : "Each bar measured against the mean & std dev of the entire selected range."
@@ -568,8 +568,8 @@ export default function App() {
                           stroke={val === 0 ? "#2a2a3a" : "#111120"} strokeWidth={val === 0 ? 1.5 : 1}
                         />
                         <text x={PAD_L - 6} y={y + 3.5} textAnchor="end"
-                          fill={Math.abs(val) >= threshold ? "#ff9100aa" : "#3a3a4a"}
-                          fontSize={10} fontFamily="inherit" fontWeight={Math.abs(val) >= threshold ? 600 : 400}
+                          fill={Math.abs(val) >= threshold ? "#ff9100cc" : "#555"}
+                          fontSize={11} fontFamily="inherit" fontWeight={Math.abs(val) >= threshold ? 600 : 400}
                         >{val > 0 ? `+${val}σ` : val === 0 ? "0" : `${val}σ`}</text>
                       </g>
                     );
@@ -625,14 +625,14 @@ export default function App() {
                         {i % labelInterval === 0 && (
                           <g>
                             <line x1={x + barWidth / 2} y1={midY + drawH / 2 + 4}
-                              x2={x + barWidth / 2} y2={midY + drawH / 2 + 10} stroke="#444" strokeWidth={1}
+                              x2={x + barWidth / 2} y2={midY + drawH / 2 + 10} stroke="#555" strokeWidth={1}
                             />
                             <text x={x + barWidth / 2} y={midY + drawH / 2 + 23}
-                              textAnchor="middle" fill="#999" fontSize={barWidth > 10 ? 10 : 9} fontFamily="inherit"
+                              textAnchor="middle" fill="#bbb" fontSize={barWidth > 10 ? 11 : 10} fontFamily="inherit"
                             >{formatDate(d.date, period)}</text>
                             {period !== "monthly" && (
                               <text x={x + barWidth / 2} y={midY + drawH / 2 + 36}
-                                textAnchor="middle" fill="#666" fontSize={8} fontFamily="inherit"
+                                textAnchor="middle" fill="#888" fontSize={9} fontFamily="inherit"
                               >{new Date(d.date + "T00:00:00").getFullYear()}</text>
                             )}
                           </g>
@@ -660,13 +660,13 @@ export default function App() {
                           {hoveredBar.z >= 0 ? "+" : ""}{hoveredBar.z.toFixed(2)}σ  ({hoveredBar.ret >= 0 ? "+" : ""}{(hoveredBar.ret * 100).toFixed(2)}%)
                         </text>
                         <text x={tipX + tipW / 2} y={tipY + 34}
-                          textAnchor="middle" fill="#999" fontSize={10} fontFamily="inherit"
+                          textAnchor="middle" fill="#bbb" fontSize={11} fontFamily="inherit"
                         >
                           {new Date(hoveredBar.date + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                         </text>
                         {hoveredBar.localStd != null && (
                           <text x={tipX + tipW / 2} y={tipY + 48}
-                            textAnchor="middle" fill="#666" fontSize={9} fontFamily="inherit"
+                            textAnchor="middle" fill="#888" fontSize={10} fontFamily="inherit"
                           >
                             local σ: {(hoveredBar.localStd * 100).toFixed(2)}%
                           </text>
@@ -678,14 +678,14 @@ export default function App() {
               </div>
 
               {clippedBars > 0 && (
-                <div style={{ padding: "4px 16px 8px", fontSize: 9, color: "#666" }}>
+                <div style={{ padding: "4px 16px 8px", fontSize: 10, color: "#888" }}>
                   ▲▼ {clippedBars} bar{clippedBars > 1 ? "s" : ""} exceed{clippedBars === 1 ? "s" : ""} ±{MAX_SIGMA_SCALE}σ scale — hover to see actual values
                 </div>
               )}
             </div>
 
             {/* Legend */}
-            <div style={{ display: "flex", gap: 20, justifyContent: "center", marginTop: 12, fontSize: 10, color: "#666" }}>
+            <div style={{ display: "flex", gap: 20, justifyContent: "center", marginTop: 12, fontSize: 11, color: "#999" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <div style={{ width: 10, height: 10, background: "#00c853", borderRadius: 2 }} /> Positive ≥ {threshold}σ
               </div>
@@ -696,7 +696,7 @@ export default function App() {
                 <div style={{ width: 10, height: 10, background: "#00c85355", borderRadius: 2 }} /> Within normal
               </div>
               {sigmaMode === "rolling" && (
-                <div style={{ color: "#555" }}>◯ Rolling {rollingWindow}-period window</div>
+                <div style={{ color: "#777" }}>◯ Rolling {rollingWindow}-period window</div>
               )}
             </div>
 
@@ -706,7 +706,7 @@ export default function App() {
                 marginTop: 20, background: "#0b0b14", border: "1px solid #151522",
                 borderRadius: 10, padding: 16, maxHeight: 260, overflowY: "auto",
               }}>
-                <div style={{ fontSize: 9, letterSpacing: 2, color: "#555", textTransform: "uppercase", marginBottom: 10 }}>
+                <div style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase", marginBottom: 10 }}>
                   Deviation Signals — {beyondThreshold} events ({pctBeyond}%) — sorted by magnitude
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 6 }}>
@@ -721,14 +721,14 @@ export default function App() {
                           padding: "6px 10px", background: "#0f0f1a", borderRadius: 5,
                           borderLeft: `3px solid ${isPos ? "#00c853" : "#ff1744"}`,
                         }}>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: isPos ? "#00c853" : "#ff1744", minWidth: 52 }}>
+                          <div style={{ fontSize: 14, fontWeight: 700, color: isPos ? "#00c853" : "#ff1744", minWidth: 52 }}>
                             {d.z >= 0 ? "+" : ""}{d.z.toFixed(2)}σ
                           </div>
                           <div>
-                            <div style={{ fontSize: 11, color: "#999" }}>
+                            <div style={{ fontSize: 12, color: "#bbb" }}>
                               {new Date(d.date + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                             </div>
-                            <div style={{ fontSize: 10, color: "#666" }}>
+                            <div style={{ fontSize: 11, color: "#888" }}>
                               {d.ret >= 0 ? "+" : ""}{(d.ret * 100).toFixed(2)}% return
                             </div>
                           </div>
